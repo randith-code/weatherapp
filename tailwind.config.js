@@ -14,6 +14,7 @@ module.exports = {
       },
       spacing:{
         '25vh':'25vh',
+        '30vh':'30vh',
         '50vh':'50vh',
         '75vh':'75vh',
         '60vh':'60vh'

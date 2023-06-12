@@ -1,37 +1,58 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { NavBar } from "../components/navBar"
 import { Weathercard } from "../components/weathercard"
-import { getforecast } from "../services/getforecast"
+import  emptyCloud  from '../utils/emptyCloud.png'
 
 
 
 const Home = () => {
 
-    const [data, setData] = useState()
-
-    useEffect(() => {
-        let getdata =async() => {
-            let d = await getforecast(90.4444, 85.3534)
-            setData(d)
-        }
-        getdata()
-    },[])
+    const [weatherList, setWeatherList] = useState([])
+    const [seemore, setMore] = useState(false)
 
     return(
         <div className="w-screen h-fit">
-            <NavBar/>
-            <div className="w-screen flex flex-wrap justify-center">
-                <Weathercard/>
-                <Weathercard/>
-                <Weathercard/>
-
+            <NavBar setData = {setWeatherList}/>
+            {weatherList.length !== 0  ?  <div className="w-screen h-fit flex flex-wrap justify-center">
+               {
+                    weatherList.slice(0,21).map((record, i) => {
+                        const wdata = {
+                            temp:record.main.temp,
+                            date:record.dt_txt,
+                            weather:record.weather[0].main,
+                            description:record.weather[0].description,
+                            icon:record.weather[0].icon
+                        }
+                        return(<Weathercard key={i} {...wdata}/>)
+                    })
+                }
+                {
+                    seemore ? weatherList.slice(21).map((record, i) => {
+                        const wdata = {
+                            temp:record.main.temp,
+                            date:record.dt_txt,
+                            weather:record.weather[0].main,
+                            description:record.weather[0].description,
+                            icon:record.weather[0].icon
+                        }
+                        return(<Weathercard key={i} {...wdata}/>)
+                    }) : <></>
+                }
                 <span className="w-5/6 h-fit flex justify-end">
-                    <p className="text-purple-main border-purple-main border-2 text-xs p-1 rounded-3xl cursor-pointer">see more...</p>
+                    <p onClick={() => setMore(!seemore)} className="text-purple-main border-purple-main border-2 text-xs p-1 rounded-3xl cursor-pointer">{!seemore ? 'see more...': 'see less'}</p>
                 </span>
-                {console.log(data)}
-            </div>
+            </div> : <EmptyCloud/>}
+        </div>
+    )
+}
+
+const EmptyCloud = () => {
+    return(
+        <div className="w-24 h-24 my-24 mx-auto grid place-items-center">
+            <img className="filter grayscale" src={emptyCloud} alt="emptyCloud" />
         </div>
     )
 }
 
 export default Home
+
