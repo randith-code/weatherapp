@@ -7,7 +7,8 @@ function App() {
     <div className="w-fit h-fit font-raleway">
       <BrowserRouter>
         <Routes>
-          <Route path="/login" element={<SignIn/>}/>
+          <Route exact path="/" element={<Home/>}/>
+          <Route path="/login"  element={<SignIn/>}/>
           <Route path="/home" element={<Home/>}/>
         </Routes>
       </BrowserRouter>
